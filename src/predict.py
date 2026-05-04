@@ -1,8 +1,17 @@
-# Script to run prediction
-theta0 = 0 # TODO Temp var
-theta1 = 0 # TODO Temp var
+from model import LinearRegressionModel
 
 def validate_mileage(mileage):
+	"""
+	Validate and convert user input into mileage value
+
+	Args: 
+		mileage (str): raw user input
+
+	Returns: 
+		tuple:
+			float or None: mileage if validation successful, else None
+			None or str: None if validation successful, else error messag
+	"""
 	try: 
 		mileage = float(mileage)
 	except ValueError:
@@ -12,18 +21,17 @@ def validate_mileage(mileage):
 		return None, "Please input positive numbers only"
 	return mileage, None
 
-
-def estimate_price(mileage, theta0, theta1):
-	return theta0 + theta1 * mileage
-
+# Main loop: prompt user for mileage and display prediction
+# Loop only ends with correct user input 
 while True:
 	user_input = input("Input mileage: ")
 	mileage, error = validate_mileage(user_input)
 	if error:
 		print(error + "\n")
 	else :
+		model = LinearRegressionModel()
 		print(f"Mileage: {mileage:,.2f}")
-		print(f"Predicted price: {estimate_price(mileage, theta0, theta1):,.2f}")
+		print(f"Predicted price: {model.predict(mileage):,.2f}")
 		print("Note: Figures are rounded to 2 decimal points")
 		break
 
