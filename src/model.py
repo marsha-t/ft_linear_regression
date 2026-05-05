@@ -1,3 +1,5 @@
+import json 
+
 class LinearRegressionModel:
     """
     Simple linear regression model with one feature
@@ -94,3 +96,36 @@ class LinearRegressionModel:
         if not isinstance(x, (int, float)):
             raise TypeError("x must be a number")
         return self.theta0 + self.theta1 * x
+    
+    def save(self, filepath):
+        # TODO Add docstring
+        """
+        Save model parameters to JSON file
+
+        Args:
+            filepath (str): filepath of JSON
+        
+        Returns:
+            None
+        """
+        data = {
+            "theta0": self.theta0,
+            "theta1": self.theta1
+        }
+        with open(filepath, "w") as file:
+            json.dump(data, file, indent=4)
+
+    @classmethod
+    def from_json(cls, filepath):
+        """ 
+        Loads model parameters from JSON file and creates new instance with loaded parameters
+
+        Args:
+            filepath (str): filepath of JSON
+        
+        Returns:
+            cls: new instance initialised with loaded parameters
+        """
+        with open(filepath, "r") as file:
+            data = json.load(file)
+        return cls(data["theta0"], data["theta1"])

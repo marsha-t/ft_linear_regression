@@ -1,4 +1,6 @@
 from model import LinearRegressionModel
+from pathlib import Path
+import matplotlib.pyplot as plt 
 
 def validate_mileage(mileage):
 	"""
@@ -29,7 +31,8 @@ while True:
 	if error:
 		print(error + "\n")
 	else :
-		model = LinearRegressionModel()
+		filepath = Path(__file__).resolve().parent.parent / "models" / "theta.json"
+		model = LinearRegressionModel.from_json(filepath)
 		print(f"Mileage: {mileage:,.2f}")
 		print(f"Predicted price: {model.predict(mileage):,.2f}")
 		print("Note: Figures are rounded to 2 decimal points")
