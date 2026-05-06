@@ -1,7 +1,7 @@
-import pandas as pd
 import numpy as np
 from model import LinearRegressionModel
 from pathlib import Path
+from load_data import load_training_data
 
 def standardise(values):
     """
@@ -10,7 +10,7 @@ def standardise(values):
     Conversion is needed for vector arithmetic
 
     Args:
-        values (list | np.ndarray): sequence of values to standardise
+        values (np.ndarray): sequence of values to standardise
 
     Returns:
         tuple:
@@ -36,11 +36,10 @@ def main():
     Load training data, standardise features, train linear regression model and save parameters to JSON
     """
     data_file_path = Path(__file__).resolve().parent.parent / "data" / "data.csv"
-    data = pd.read_csv(data_file_path, header=0)
+    
+    x, y = load_training_data(data_file_path, "km", "price")
+    print(f"Loaded dataset: {len(y)} samples\n")
 
-    print(f"Loaded dataset: {data.shape[0]} samples\n")
-    x = data['km'].tolist() # If x is a Series, x[i] is treated as a label, not int/float
-    y = data['price'].tolist()
     try:
         x_scaled, x_mean, x_std  = standardise(x)
     except ValueError as error:
@@ -48,7 +47,7 @@ def main():
         return
     print("Feature standardisation:")
     print(f"mean(km): {x_mean}")
-    print(f"std(km): {x_std}]\n")
+    print(f"std(km): {x_std}\n")
 
     model = LinearRegressionModel()
     model.fit(x_scaled, y, 0.01, 1000) # TODO remove hardcoded values
