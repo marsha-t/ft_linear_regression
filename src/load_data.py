@@ -1,7 +1,5 @@
 import pandas as pd 
 import numpy as np
-from pathlib import Path
-
 
 def validate_csv(data, required_columns):
     """

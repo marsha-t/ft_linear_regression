@@ -1,35 +1,10 @@
-import numpy as np
 from model import LinearRegressionModel
 from pathlib import Path
 from load_data import load_training_data
+from preprocessing import standardise
 
-def standardise(values):
-    """
-    Standardise values using z-score normalisation
-    Converts input to NumPy array, then scales data to mean 0 and std 1
-    Conversion is needed for vector arithmetic
-
-    Args:
-        values (np.ndarray): sequence of values to standardise
-
-    Returns:
-        tuple:
-            scaled (np.ndarray): standardised values
-            mean (float): mean of original values
-            std (float): standard deviation of original values
-
-    Raises:
-        ValueError:
-            If standard deviation is zero
-    """
-    values = np.array(values, dtype=float)
-    mean = np.mean(values)
-    std = np.std(values)
-
-    if std == 0:
-        raise ValueError("Cannot standardise values with zero standard deviation")
-    scaled = (values - mean) / std
-    return scaled, mean, std
+LEARNING_RATE = 0.01
+N_ITERS = 1000
 
 def main():
     """
@@ -46,11 +21,11 @@ def main():
         print(error)
         return
     print("Feature standardisation:")
-    print(f"mean(km): {x_mean}")
-    print(f"std(km): {x_std}\n")
+    print(f"mean(km): {x_mean:.2f}")
+    print(f"std(km): {x_std:.2f}\n")
 
     model = LinearRegressionModel()
-    model.fit(x_scaled, y, 0.01, 1000) # TODO remove hardcoded values
+    model.fit(x_scaled, y, LEARNING_RATE, N_ITERS)
 
     model.x_mean = x_mean # values must be set after training, else predict() in fit() will cause double scaling
     model.x_std = x_std
