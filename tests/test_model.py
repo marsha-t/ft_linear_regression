@@ -1,4 +1,4 @@
-from src.model import LinearRegressionModel
+from src import LinearRegressionModel
 
 model = LinearRegressionModel()
 x = [1, 2, 3]

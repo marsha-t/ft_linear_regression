@@ -25,16 +25,20 @@ def validate_mileage(mileage):
 
 # Main loop: prompt user for mileage and display prediction
 # Loop only ends with correct user input 
-while True:
-	user_input = input("Input mileage: ")
-	mileage, error = validate_mileage(user_input)
-	if error:
-		print(error + "\n")
-	else :
-		filepath = Path(__file__).resolve().parent.parent / "models" / "theta.json"
-		model = LinearRegressionModel.from_json(filepath)
-		print(f"Mileage: {mileage:,.2f}")
-		print(f"Predicted price: {model.predict(mileage):,.2f}")
-		print("Note: Figures are rounded to 2 decimal points")
-		break
+def main():
+	while True:
+		user_input = input("Input mileage: ")
+		mileage, error = validate_mileage(user_input)
+		if error:
+			print(error + "\n")
+		else :
+			filepath = Path(__file__).resolve().parent.parent / "models" / "theta.json"
+			model = LinearRegressionModel.from_json(filepath)
+			print(f"Mileage: {mileage:,.2f}")
+			print(f"Predicted price: {model.predict(mileage):,.2f}")
+			print("Note: Figures are rounded to 2 decimal points")
+			break
 
+
+if __name__ == "__main__":
+    main()
