@@ -12,7 +12,7 @@ def validate_mileage(mileage):
 	Returns: 
 		tuple:
 			float or None: mileage if validation successful, else None
-			None or str: None if validation successful, else error messag
+			None or str: None if validation successful, else error message
 	"""
 	try: 
 		mileage = float(mileage)
@@ -23,17 +23,21 @@ def validate_mileage(mileage):
 		return None, "Please input positive numbers only"
 	return mileage, None
 
-# Main loop: prompt user for mileage and display prediction
-# Loop only ends with correct user input 
 def main():
+	"""
+	Loads trained model and interactively predicts car price from user-provided input
+	Loop only ends with correct user input 
+	"""
+	filepath = Path(__file__).resolve().parent.parent / "models" / "model.json"
+	model = LinearRegressionModel.from_json(filepath)
+
 	while True:
 		user_input = input("Input mileage: ")
 		mileage, error = validate_mileage(user_input)
 		if error:
 			print(error + "\n")
 		else :
-			filepath = Path(__file__).resolve().parent.parent / "models" / "theta.json"
-			model = LinearRegressionModel.from_json(filepath)
+			
 			print(f"Mileage: {mileage:,.2f}")
 			print(f"Predicted price: {model.predict(mileage):,.2f}")
 			print("Note: Figures are rounded to 2 decimal points")

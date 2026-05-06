@@ -7,13 +7,19 @@ class LinearRegressionModel:
     Predicts using y = theta0 + theta1 * x
     """
 
-    def __init__(self, theta0=0, theta1=0):
+    def __init__(self, theta0=0, theta1=0, x_mean=None, x_std=None):
         """
         Initialises model with given parameters
         
         Args: 
             theta0 (float): intercept (default = 0)
             theta1 (float): slope (default = 0)
+            x_mean (float | None): mean used for standardisation
+            x_std (float | None): standard deviation used for standardisation
+        
+        Raises:
+            TypeError:
+                - theta0 or theta1 is not a number  
         """
         if not isinstance(theta0, (int, float)):
             raise TypeError("theta0 must be a number")
@@ -22,6 +28,8 @@ class LinearRegressionModel:
         
         self.theta0 = theta0
         self.theta1 = theta1
+        self.x_mean = x_mean
+        self.x_std = x_std
 
     def fit(self, x, y, learning_rate, n_iters, tolerance=1e-6):
         """
@@ -38,6 +46,19 @@ class LinearRegressionModel:
 
         Returns: 
             None: Updates model parameters in place 
+        
+        Raises:
+            ValueError:
+                - x and y have different lengths
+                - x and y are empty
+                - learning_rate is not positive
+                - n_iters is not positive
+                - tolerance is negative
+
+            TypeError:
+                - learning_rate is not numeric
+                - n_iters is not an integer
+                - tolerance is not numeric
         """
         m = len(x)
         if m != len(y):
@@ -86,19 +107,31 @@ class LinearRegressionModel:
     def predict(self, x):
         """
         Predict output given single input value
+        If scaling parameters are available, input is standardised using stored mean and standard deviation
 
         Args: 
             x (float): input feature value
 
         Returns:
             float: predicted value 
+        
+        Raises:
+            TypeError: 
+                If x is not a number
+            ValueError:
+                If model scaling parameters are incomplete or invalid
         """
         if not isinstance(x, (int, float)):
             raise TypeError("x must be a number")
+        if self.x_mean is not None or self.x_std is not None:
+            if self.x_mean is None or self.x_std is None:
+                raise ValueError("Model scaling parameters are invalid")
+            if self.x_std == 0:
+                raise ValueError("Model scaling parameters are invalid")        
+            x = (x - self.x_mean) / self.x_std
         return self.theta0 + self.theta1 * x
     
     def save(self, filepath):
-        # TODO Add docstring
         """
         Save model parameters to JSON file
 
@@ -110,7 +143,9 @@ class LinearRegressionModel:
         """
         data = {
             "theta0": self.theta0,
-            "theta1": self.theta1
+            "theta1": self.theta1,
+            "x_mean": self.x_mean,
+            "x_std": self.x_std
         }
         with open(filepath, "w") as file:
             json.dump(data, file, indent=4)
@@ -128,4 +163,4 @@ class LinearRegressionModel:
         """
         with open(filepath, "r") as file:
             data = json.load(file)
-        return cls(data["theta0"], data["theta1"])
+        return cls(data["theta0"], data["theta1"], data["x_mean"], data["x_std"])
