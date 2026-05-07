@@ -31,7 +31,7 @@ class LinearRegressionModel:
         self.x_mean = x_mean
         self.x_std = x_std
 
-    def fit(self, x, y, learning_rate, n_iters, tolerance=1e-6):
+    def fit(self, x, y, learning_rate, epochs, tolerance=1e-6):
         """
         Train linear regression model using gradient descent
 
@@ -39,7 +39,7 @@ class LinearRegressionModel:
             x (list[float] or array-like): input feature values
             y (list[float] or array-like): target values
             learning_rate (float): step size for gradient descent
-            n_iters (int): number of iterations for gradient descent 
+            epochs (int): number of epochs for gradient descent 
             tolerance (float): Min change in mean square error (MSE) required to continue training (default = 0.000001)
                 Training stops early if improvement falls below this threshold
                 Set to 0 to disable early stopping
@@ -52,12 +52,12 @@ class LinearRegressionModel:
                 - x and y have different lengths
                 - x and y are empty
                 - learning_rate is not positive
-                - n_iters is not positive
+                - epochs is not positive
                 - tolerance is negative
 
             TypeError:
                 - learning_rate is not numeric
-                - n_iters is not an integer
+                - epochs is not an integer
                 - tolerance is not numeric
         """
         m = len(x)
@@ -69,10 +69,10 @@ class LinearRegressionModel:
             raise TypeError("learning_rate must be a number")
         if learning_rate <= 0:
             raise ValueError("learning_rate must be a strictly positive number")
-        if not isinstance(n_iters, int):
-            raise TypeError("n_iters must be an integer")
-        if n_iters <= 0:
-            raise ValueError("n_iters must be a strictly positive number")
+        if not isinstance(epochs, int):
+            raise TypeError("epochs must be an integer")
+        if epochs <= 0:
+            raise ValueError("epochs must be a strictly positive number")
         if not isinstance(tolerance, (int, float)):
             raise TypeError("tolerance must be a number")
         if tolerance < 0:
@@ -80,7 +80,7 @@ class LinearRegressionModel:
         
         prev_loss = float("inf") 
 
-        for _ in range(n_iters): 
+        for _ in range(epochs): 
             gradient_theta0 = 0 
             gradient_theta1 = 0
 

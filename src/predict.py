@@ -1,15 +1,15 @@
-from .model import LinearRegressionModel
 from pathlib import Path
 import matplotlib.pyplot as plt 
 import argparse
 import math 
+from .model import LinearRegressionModel
 
-def positive_float(mileage):
+def positive_float(value):
 	"""
-	Validate and convert mileage argument into positive finite float
+	Validate and convert argument into positive finite float
 
 	Args: 
-		mileage (str): raw user input
+		value (str): raw user input
 
 	Returns: 
 		float: validated mileage
@@ -19,15 +19,15 @@ def positive_float(mileage):
 			If value is not numeric, negative, NaN or infinite
 	"""
 	try: 
-		mileage = float(mileage)
+		value = float(value)
 	except ValueError:
 		raise argparse.ArgumentTypeError("Mileage must be a number")
 	
-	if (mileage < 0):
+	if value < 0:
 		raise argparse.ArgumentTypeError("Mileage must be positive")
-	if not math.isfinite(mileage): # covers inf, -inf, nan
+	if not math.isfinite(value): # covers inf, -inf, nan
 		raise argparse.ArgumentTypeError("Mileage must be finite")
-	return mileage
+	return value
 
 def main():
 	"""
@@ -38,6 +38,7 @@ def main():
 	"""
 	parser = argparse.ArgumentParser(description="Predict car price")
 	parser.add_argument("--mileage", type=positive_float, required=True, help="Car mileage")
+	parser.add_argument("--model", default="models/model.json", help="Path to trained model JSON")
 
 	args = parser.parse_args()
 
