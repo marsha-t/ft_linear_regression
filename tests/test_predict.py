@@ -1,35 +1,36 @@
-from src import positive_float
-
 import argparse
 import pytest
+from unittest.mock import patch
 
-def test_positive_float_valid():
-	assert(positive_float("42") == 42.0)
+from src import positive_float, predict_main
 
-def test_positive_float_decimal():
-	assert(positive_float("42.5") == 42.5)
+# Test valid values
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ("42", 42.0),
+        ("42.5", 42.5),
+        ("0", 0.0),
+        ("1e3", 1000.0),
+        (" 42 ", 42.0)
+    ],
+)
+def test_positive_float_valid(value, expected):
+    assert positive_float(value) == expected
 
-def test_positive_float_negative():
-    with pytest.raises(argparse.ArgumentTypeError):
-        positive_float("-1")
-        
-def test_positive_float_non_number():
-    with pytest.raises(argparse.ArgumentTypeError):
-        positive_float("abc")
-        
-def test_positive_float_inf():
-    with pytest.raises(argparse.ArgumentTypeError):
-        positive_float("inf")
-        
-def test_positive_float_nan():
-    with pytest.raises(argparse.ArgumentTypeError):
-        positive_float("nan")
-        
+# Test invalid values
+@pytest.mark.parametrize(
+    "value",
+    ["-1", "abc", "inf", "-inf", "nan"],
+)
+def test_positive_float_invalid(value):
+    with pytest.raises(argparse.ArgumentTypeError): 
+        positive_float(value)
 
-# @pytest.mark.parametrize(
-#     "value",
-#     ["-1", "abc", "inf", "-inf", "nan"]
-# )
-# def test_positive_float_invalid(value):
-#     with pytest.raises(argparse.ArgumentTypeError):
-#         positive_float(value)
+# Test missing required argument
+def test_missing_mileage():
+    with patch("sys.argv", ["predict.py"]): # temporary replace sys.argv (Python CLI): run python predict.py
+        with pytest.raises(SystemExit) as exc_info: 
+            predict_main()
+
+    assert exc_info.value.code == 2
