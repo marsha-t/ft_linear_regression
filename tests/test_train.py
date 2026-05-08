@@ -52,26 +52,47 @@ def test_main_flow():
     with patch("src.train.load_training_data") as mock_load, \
          patch("src.train.standardise") as mock_standardise, \
          patch("src.train.LinearRegressionModel") as mock_model_class, \
+         patch("src.train.plot_regression_fit") as mock_plot, \
+         patch("src.train.mse") as mock_mse, \
+         patch("src.train.mae") as mock_mae, \
+         patch("src.train.r2_score") as mock_r2, \
          patch("sys.argv", ["train.py"]):
 
         mock_load.return_value = ([1, 2], [3, 4])
 
         mock_standardise.return_value = (
-            [0.0, 1.0],  # scaled x
-            1.5,         # mean
-            0.5          # std
+            [0.0, 1.0],
+            1.5,
+            0.5
         )
 
-        mock_model = MagicMock() # Create fake model object
+        mock_model = MagicMock()
         mock_model.theta0 = 1234.56
         mock_model.theta1 = 78.9
+
+        mock_model.predict.side_effect = [3.1, 3.9]
+
         mock_model_class.return_value = mock_model
+
+        mock_mse.return_value = 0.01
+        mock_mae.return_value = 0.02
+        mock_r2.return_value = 0.99
 
         train_main()
 
         mock_load.assert_called_once()
         mock_standardise.assert_called_once()
+
         mock_model.fit.assert_called_once()
+        mock_model.predict.assert_any_call(1)
+        mock_model.predict.assert_any_call(2)
+
+        mock_mse.assert_called_once()
+        mock_mae.assert_called_once()
+        mock_r2.assert_called_once()
+
+        mock_plot.assert_called_once()
+
         mock_model.save.assert_called_once()
 
 def test_main_standardise_failure(capsys):

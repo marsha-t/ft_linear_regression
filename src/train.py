@@ -5,6 +5,7 @@ from .load_data import load_training_data
 from .preprocessing import standardise
 from .model import LinearRegressionModel
 from .plot import plot_regression_fit
+from .metrics import mse, mae, r2_score
 
 def positive_float(value):
     """
@@ -88,8 +89,8 @@ def main():
         print(error)
         return
     print("Feature standardisation:")
-    print(f"mean(km): {x_mean:.2f}")
-    print(f"std(km): {x_std:.2f}\n")
+    print(f"mean(km): {x_mean:,.2f}")
+    print(f"std(km): {x_std:,.2f}\n")
 
     model = LinearRegressionModel()
     model.fit(x_scaled, y, args.lr, args.epochs)
@@ -98,11 +99,20 @@ def main():
     model.x_std = x_std
 
     print("Training complete")
-    print(f"theta0: {model.theta0:.2f}")
-    print(f"theta1: {model.theta1:.2f}\n")
+    print(f"theta0: {model.theta0:,.2f}")
+    print(f"theta1: {model.theta1:,.2f}\n")
+
+    predictions = [model.predict(mileage) for mileage in x]
+    mse_value = mse(y, predictions)
+    mae_value = mae(y, predictions)
+    r2_value = r2_score(y, predictions)
+    print("Training metrics")
+    print(f"Mean Squared Error: {mse_value:,.2f}")
+    print(f"Mean Absolute Error: {mae_value:,.2f}")
+    print(f"R2: {r2_value:,.2f}\n")
 
     plot_regression_fit(x, y, model)
-    
+
     model.save(args.output)
     print(f"Model saved to: {args.output}")
 
