@@ -2,7 +2,9 @@ import pytest
 import argparse 
 from unittest.mock import patch, MagicMock
 
-from src import train_positive_float, train_positive_int, train_main
+from src.train import positive_float as train_positive_float
+from src.train import positive_int as train_positive_int
+from src.train import main as train_main
 
 # Test positive_float()
 @pytest.mark.parametrize(

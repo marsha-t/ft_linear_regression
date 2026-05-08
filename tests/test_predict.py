@@ -2,7 +2,9 @@ import argparse
 import pytest
 from unittest.mock import patch
 
-from src import predict_positive_float, predict_main
+from src.predict import positive_float as predict_positive_float
+from src.predict import main as predict_main
+
 
 # Test valid values
 @pytest.mark.parametrize(
