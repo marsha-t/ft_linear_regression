@@ -1,8 +1,10 @@
 import argparse
 import math
+
 from .load_data import load_training_data
 from .preprocessing import standardise
 from .model import LinearRegressionModel
+from .plot import plot_regression_fit
 
 def positive_float(value):
     """
@@ -78,7 +80,6 @@ def main():
     args = parser.parse_args()
 
     x, y = load_training_data(args.data, "km", "price")
-    
     print(f"Loaded dataset: {len(y)} samples\n")
 
     try:
@@ -100,6 +101,8 @@ def main():
     print(f"theta0: {model.theta0:.2f}")
     print(f"theta1: {model.theta1:.2f}\n")
 
+    plot_regression_fit(x, y, model)
+    
     model.save(args.output)
     print(f"Model saved to: {args.output}")
 
