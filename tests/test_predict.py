@@ -2,7 +2,7 @@ import argparse
 import pytest
 from unittest.mock import patch
 
-from src import positive_float, predict_main
+from src import predict_positive_float, predict_main
 
 # Test valid values
 @pytest.mark.parametrize(
@@ -16,7 +16,7 @@ from src import positive_float, predict_main
     ],
 )
 def test_positive_float_valid(value, expected):
-    assert positive_float(value) == expected
+    assert predict_positive_float(value) == expected
 
 # Test invalid values
 @pytest.mark.parametrize(
@@ -25,7 +25,7 @@ def test_positive_float_valid(value, expected):
 )
 def test_positive_float_invalid(value):
     with pytest.raises(argparse.ArgumentTypeError): 
-        positive_float(value)
+        predict_positive_float(value)
 
 # Test missing required argument
 def test_missing_mileage():
