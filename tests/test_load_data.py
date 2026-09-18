@@ -2,7 +2,8 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from src import validate_csv, load_training_data
+from linear_regression import validate_csv, load_training_data
+
 
 # Test validate_csV()
 def test_validate_csv_valid():

@@ -1,5 +1,6 @@
 
-import numpy as np 
+import numpy as np
+
 
 def standardise(values):
     """
@@ -22,6 +23,8 @@ def standardise(values):
     std = np.std(values)
 
     if std == 0:
-        raise ValueError("Cannot standardise values with zero standard deviation")
+        raise ValueError(
+            "Cannot standardise values with zero standard deviation"
+        )
     scaled = (values - mean) / std
     return scaled, mean, std

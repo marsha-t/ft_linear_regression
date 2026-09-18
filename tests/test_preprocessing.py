@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from src import standardise
+from linear_regression import standardise
 
 def test_standardise_values():
     values = np.array([1, 2, 3])

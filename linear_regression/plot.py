@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 from matplotlib.ticker import StrMethodFormatter
 
+
 def plot_regression_fit(x, y, model):
     """
-    Plot scatter plot of mileage and price with fitted regression line from given model
+    Plot scatter plot of mileage and price with fitted regression line from
+        given model
 
     Args:
         x (Sequence(float)): mileage values
@@ -11,10 +13,8 @@ def plot_regression_fit(x, y, model):
         model: regression model with predict(value) method
 
     Returns:
-        None: Displays plot in new window 
-
+        None: Displays plot in new window
     """
-
     fig, ax = plt.subplots()
 
     ax.scatter(x, y, alpha=0.5)

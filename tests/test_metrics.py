@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from src.metrics import mse, mae, r2_score
+from linear_regression.metrics import mse, mae, r2_score
 
 # Test mse()
 @pytest.mark.parametrize(
